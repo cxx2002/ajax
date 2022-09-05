@@ -1,0 +1,120 @@
+<!DOCTYPE html><script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JQuery的ajax请求</title>
+    <style type="text/css">
+        .main{
+            width: 500px;
+            margin:0 auto;
+            text-align: center;
+        }
+        #table{
+            display: inline-block;
+            vertical-align: top;
+            border-collapse:collapse;
+        }
+        tr td{
+            width:200px;
+            border: 1px solid gray;
+        }
+    </style>
+
+    <style type="text/css">
+        .button{
+            width: 100px;
+            height: 29px;
+            font-size: 16px;
+            color: white;
+            background-color: black;
+            padding: 0;
+            vertical-align: top;
+            border: 0;
+        }
+        .textbox{
+            height: 25px;
+            padding: 0;
+            vertical-align: top;
+        }
+        span{
+            font-size: 16px;
+            height: 29px;
+            line-height: 29px;
+        }
+    </style>
+
+</head>
+<body>
+
+<div>
+    <form name="form">
+        <span>输入地址：</span><input id="text" class="textbox" type="text"/>
+        <input class="button" type="button" value="获取经纬度" onclick="showAdress()"/>
+    </form>
+</div>
+
+<div class="main">
+    <table id="table">
+        <tr>
+            <th>
+                申请人省份
+            </th>
+            <th>
+                数量
+            </th>
+        </tr>
+    </table>
+    <input type="button" value="PRINT" onclick="printtable()"/>
+</div>
+
+
+<script type="text/javascript">
+    function showAdress()
+    {
+        var str = document.getElementById("text").value;
+        $.ajax
+        ({
+            url: "https://restapi.amap.com/v3/geocode/geo",
+            dataType: "json",
+            type: "get",
+            data: {
+                address: str,
+                key: "7486e10d3ca83a934438176cf941df0c",
+            },
+            success:function(res){
+                alert(res.geocodes[0].formatted_address+"经纬度："+res.geocodes[0].location);
+                console.log(res);  //在console中查看数据
+            },
+            error:function(){
+                alert('failed!');
+            },
+        });
+    }
+</script>
+<script>
+    jsonString = "{\"result\":[{\"申请人省份\":\"0\",\"counts\":1553},{\"申请人省份\":\"上海市\",\"counts\":637},{\"申请人省份\":\"云南省\",\"counts\":81},{\"申请人省份\":\"内蒙古自治区\",\"counts\":52},{\"申请人省份\":\"北京市\",\"counts\":1186},{\"申请人省份\":\"吉林省\",\"counts\":90},{\"申请人省份\":\"四川省\",\"counts\":443},{\"申请人省份\":\"天津市\",\"counts\":249},{\"申请人省份\":\"宁夏回族自治区\",\"counts\":15},{\"申请人省份\":\"安徽省\",\"counts\":1633},{\"申请人省份\":\"山东省\",\"counts\":780},{\"申请人省份\":\"山西省\",\"counts\":60},{\"申请人省份\":\"广东省\",\"counts\":1575},{\"申请人省份\":\"广西壮族自治区\",\"counts\":367},{\"申请人省份\":\"新疆维吾尔自治区\",\"counts\":48},{\"申请人省份\":\"江苏省\",\"counts\":1889},{\"申请人省份\":\"江西省\",\"counts\":90},{\"申请人省份\":\"河北省\",\"counts\":164},{\"申请人省份\":\"河南省\",\"counts\":261},{\"申请人省份\":\"浙江省\",\"counts\":905},{\"申请人省份\":\"海南省\",\"counts\":20},{\"申请人省份\":\"湖北省\",\"counts\":439},{\"申请人省份\":\"湖南省\",\"counts\":211},{\"申请人省份\":\"甘肃省\",\"counts\":71},{\"申请人省份\":\"福建省\",\"counts\":277},{\"申请人省份\":\"西藏自治区\",\"counts\":5},{\"申请人省份\":\"贵州省\",\"counts\":108},{\"申请人省份\":\"辽宁省\",\"counts\":199},{\"申请人省份\":\"重庆市\",\"counts\":193},{\"申请人省份\":\"陕西省\",\"counts\":270},{\"申请人省份\":\"青海省\",\"counts\":15},{\"申请人省份\":\"香港\",\"counts\":1},{\"申请人省份\":\"黑龙江省\",\"counts\":215},],\"reason\":\"\",\"status\":\"success\"}\n"
+    res = JSON.parse(jsonString);
+
+    function printtable()
+    {
+        $.ajax({
+            url:'http://hebutgo.com:8080/maps/getMapsList',
+            type:'get',
+            datatype:'json',
+            success:function(res)
+            {
+                console.log(res);  //在console中查看数据
+                $.each(res.result,function(index,obj){
+                    $("#table").append(
+                        "<tr><td>"+obj['申请人省份']+"</td>"+
+                        "<td>"+obj['counts']+"</td><tr>");
+                });
+
+            }
+        })
+    }
+
+</script>
+
+</body>
+</html>

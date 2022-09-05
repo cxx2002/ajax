@@ -1,0 +1,50 @@
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ajax get请求</title>
+</head>
+<body>
+hello ajax!!!!!!!!!<br>
+<input type="button" value="hello ajax" id="helloBtn">
+<div id="mydiv"></div>
+</body>
+<script>
+  $(function (){
+      $("#helloBtn").click(function (){
+          //发送ajax get请求
+//consoLe.log("发送ajax get请求")
+// 1.第步: 创建AJAX核心对 象XMLHttpRequest
+          var xhr = new XMLHttpRequest();
+// 2.第二步:注册回调函数
+//这是一个回调函数，这个函数在XMLHttpReques t对象的readyState状态值发生改变的时候被调用。
+          xhr . onreadystatechange = function (){
+//这里的回调函数会被调用多次。
+//0->1被调用一次
+//1->2被调用一次
+//2->3被调用一次
+//3->4被调用一次
+              console . log(xhr . readyState)
+              if (this.readyState==4){
+                  console.log(this.status)
+                  if (this.status==200){
+                      alert(this.responseText)
+                  }
+              }
+          }
+// 3.第三步:开启通道(open只是浏览器和服务器建立连接， 通道打开，并不会发送请求)
+// XMLHttpRequest对 象的open方法
+// open(method, urL, async, user, psw)
+// method: 请求的方式， 可以是GET, 也可以是POST, 也可以是其它请求方式。
+// urL: 请求的路径
+// async: 只能是true或者 false, true表示此ajax请求是一个异步请 求，false表示此ajax请求是一一个同步请求。 (大 部分请求都是true,要求异步。极少数情况需要同步，以后再说。
+// user: 用户名pwd: 密码，用户名和密码是进行身份认证的，说明要想访问这个服务器上的资源， 可能需要提供一 些口令才能访问。需不需要用户名和密码，主要看服务器的态度。
+          xhr . open("GET","/old/ajaxRequest1", true)
+// 4.第四步:发送请求
+          xhr. send()
+
+      })
+  })
+</script>
+</html>

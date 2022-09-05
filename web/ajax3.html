@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ajax验证用户名是否重复</title>
+</head>
+<script>
+    onload = function (){
+        document.getElementById("username").onfocus = function (){
+            document.getElementById("tipMsg").innerHTML=""
+        }
+        document.getElementById("username").onblur = function (){
+            console.log("正在发送ajax-post请求验证用户名")
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function (){
+                if (this.readyState == 4) {
+                    if (this.status == 200) {
+                        document.getElementById("tipMsg").innerHTML=this.responseText
+                    }else {
+                        alert(this.status)
+                    }
+                }
+            }
+            xhr.open("POST","/old/ajaxRequest4",true)
+            xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded")
+
+            var username = document.getElementById("username").value;
+            xhr.send("username="+username)
+        }
+    }
+</script>
+<body>
+用户名<input type="text" id = "username">
+<span id="tipMsg"></span>
+</body>
+</html>

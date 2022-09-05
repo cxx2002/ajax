@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ajax2</title>
+</head>
+<body>
+usercode<input type="text" name="usercode"><br>
+username<input type="text" name="username"><br>
+<input type="button" value="发送ajax的get请求" id="myBtn">
+<span id="mySpan"></span>
+<br><a href="/old/ajax2.html">ajax的post请求</a><br>
+<a href="/old/hello.html">老请求</a><br>
+<a href="/old/ajax3.html">验证用户名</a><br>
+<a href="/old/ajax4.html">JQuery的ajax</a><br>
+<a href="/old/autocomplete.html">ajax的搜索联想和自动补全</a>
+<script>
+    function duplicates(arr) {
+        let newArr = [];
+        arr.forEach(i =>{
+            if(arr.indexOf(i)!=arr.lastIndexOf(i)){
+                newArr.push(i)
+                newArr=[...new Set(newArr)]
+            }
+        })
+        return newArr
+    }
+    console.log(duplicates([1,2,2,2,2,2.3,3,4,4,8]))
+
+    $(function (){
+        $("#myBtn").click(function (){
+
+            let xhr = new XMLHttpRequest();//获取XMLHttpRequest对象
+
+            xhr.onreadystatechange = function (){//绑定事件函数
+                if(this.readyState === 4){
+                    if(this.status === 200){
+                        $("#mySpan").html(this.responseText)
+                    }else {
+                        alert(this.status)
+                    }
+                }
+            }
+            let usercode = $('input[name="usercode"]').val();
+            let username = $('input[name="username"]').val();
+            xhr.open("Get","/old/ajaxRequest2?"+new Date().getTime()+"&usercode="+usercode+"&username="+username,true)//创建路径
+            //加时间戳或者随机数来解决低版本浏览器的get请求的缓存问题，post不存在缓存问题
+            xhr.send()//发送请求
+        })
+    })
+</script>
+</body>
+</html>

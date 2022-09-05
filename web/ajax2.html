@@ -1,0 +1,50 @@
+<!DOCTYPE html><script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>post请求ajax</title>
+</head>
+<script>
+    onload = function (){
+        document.getElementById("myBtn").onclick=function (){
+            var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function (){
+                if (this.readyState == 4){
+                    if (this.status == 200) {
+                        document.getElementById("myDiv").innerHTML = this.responseText
+                    }else {
+                        document.getElementById("myDiv").innerHTML = this.status
+                        alert(this.status)
+                    }
+                }
+            }
+            xhr.open("post","/old/ajaxRequest3",true)
+            //< form encType = "application/x-www-form-urlencoded" > < /form>
+//设置请求头
+            xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded")
+            let usercode = $('input[name="usercode"]').val();
+            let username = $('input[name="username"]').val();
+            xhr.send("usercode="+usercode+"&username="+username)//ajax的post请求数据在send（）发送数据
+        }
+    }
+    $.ajax({
+        url:"发送请求（提交或读取数据）的地址",
+        dataType:"预期服务器返回数据的类型",
+        type:"请求方式",
+        async:"true/false",
+        data:{},//发送到/读取后台（服务器）的数据
+        success:function(data){},//请求成功时执行
+        error:function(){}//请求失败时执行
+    })
+    $.ajax({
+        async:true
+
+    })
+</script>
+<body>
+usercode<input type="text" name="usercode"><br>
+username<input type="text" name="username"><br>
+<input id="myBtn" type="button" value="发送ajax   post请求"><div id = "myDiv"></div>
+</body>
+</html>

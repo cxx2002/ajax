@@ -1,0 +1,78 @@
+<!DOCTYPE html><script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ajax搜索联想和自动补全</title>
+    <styLe>
+        .userInput {
+            width: 300px;
+            height: 25px;
+            font-size: 20px;
+            padding-Left: 5px;
+        }
+        .showDataDiv {
+             width: 320px;
+             border: 1px solid Lightgray;
+             background-color: antiquewhite ;
+             display: none;/*没搜索时隐藏*/
+         }
+        .showDataDiv p {
+            padding-left: 5px;
+            margin-top: 2px;
+            margin-bottom: 2px;
+        }
+        .showDataDiv p:hover{
+            cursor: pointer;
+            border: 1px blue solid;
+            background-color: aliceblue;
+        }
+    </style>
+</head>
+<script>
+    function fun(s){
+        $("#keyText").val(s)
+        $(".showDataDiv").get(0).style.display = "none";
+    }
+    onload = () => {
+        document.getElementById("keyText").onkeyup = function (ev) {
+            if ($("#keyText").val() == "") {
+                $(".showDataDiv").get(0).style.display = "none";
+            } else {
+                $.ajax({
+                    url: "/old/autoComplete",
+                    type: "get",
+                    dataType: "json",//jquery中设置了dataType=“json”，返回的就直接是一个json对象
+                    async: "true",
+                    data: {
+                        textValue: $("#keyText").val(), //前端传给后端的文本框内容
+                        time: new Date().getTime()//时间戳
+                    },
+                    success: function (data) {
+                        let html = ""
+                        for (let i = 0; i < data.length; i++) {
+                            html += "<p onclick='fun(\""+data[i].content+"\")'>" + data[i].content + "</p>"//后端响应回来的数据库的内容content
+                        }
+                        $("#mydiv").html(html);
+                        $(".showDataDiv").get(0).style.display = "block";//搜索时显示div
+                    },
+                    error: function (e) {//如果返回为空或者返回的是“]”（不是一个json的字符串）就算是错误，走error
+                        $(".showDataDiv").get(0).style.display = "none";//为空时隐藏div
+                    }
+                })
+            }
+        }
+    }
+</script>
+<body>
+<input id="keyText" type="text" class="userInput" placeholder="输入你的搜索">
+<div id="mydiv" class="showDataDiv">
+   <!-- <p>北京天气</p>
+    <p>北京时间</p>
+    <p>北京大学</p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>-->
+</div>
+</body>
+</html>
